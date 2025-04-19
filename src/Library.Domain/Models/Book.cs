@@ -1,23 +1,39 @@
+using System.ComponentModel.DataAnnotations;
 using Library.Domain.Enums;
 
 namespace Library.Domain.Models;
 
-public sealed class Book
+public sealed class Book(
+	int id,
+	string title,
+	string author,
+	DateTime publishedDate,
+	string bookCover,
+	EPublisher publisher,
+	ECategory category)
 {
-    public Book(int id, string title, string author, DateTime publishedDate, string bookCover, EPublisher publisher, ECategory category)
-    {
-        Title = title;
-        Author = author;
-        PublishedDate = publishedDate;
-        BookCover = bookCover;
-        Publisher = publisher;
-        Category = category;
-    }
-    public int Id { get; set; }
-    public string Title { get; set; } = string.Empty;
-    public string Author { get; set; } = string.Empty;
-    public DateTime PublishedDate { get; set; }
-    public string BookCover { get; set; } = string.Empty;
-    public EPublisher Publisher { get; set; } = EPublisher.Other;
-    public ECategory Category { get; set; } = ECategory.Other;
+	[Key]
+	public int Id { get; set; } = id;
+	
+	[Required(ErrorMessage = "Informe o título do livro")]
+	[StringLength(100, ErrorMessage = "Minomo de {2} e máximo de {1}", MinimumLength = 10)]
+	public string Title { get; set; } = title;
+
+	[Required(ErrorMessage = "Informe o autor do livro")]
+	[StringLength(100)]
+	public string Author { get; set; } = author;
+
+	[Required(ErrorMessage = "Informe a data de publicação do livro")]
+	public DateTime PublishedDate { get; set; } = publishedDate;
+
+	[Required(ErrorMessage = "Informe a capa do livro")]
+	public string BookCover { get; set; } = bookCover;
+
+	[Required]
+	[EnumDataType(typeof(EPublisher), ErrorMessage = "Informe uma editora válida")]
+	public EPublisher Publisher { get; set; } = publisher;
+
+	[Required]
+	[EnumDataType(typeof(ECategory), ErrorMessage = "Informe uma categoria válida")]
+	public ECategory Category { get; set; } = category;
 }
