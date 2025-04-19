@@ -5,7 +5,7 @@ namespace Library.Domain.Abstractions;
 public interface IBookRepository
 {
 	Task<IEnumerable<Book>> GetAllAsync(CancellationToken cancellationToken);
-	Task<Book?> GetByIdAsync(int id, CancellationToken cancellationToken);
+	Task<Book?> GetByIdAsync(int id);
 	Task<Book?> GetByTitleAsync(string title, CancellationToken cancellationToken);
 	Task Remove(int id);
 	Task AddAsync(Book book, CancellationToken cancellationToken);

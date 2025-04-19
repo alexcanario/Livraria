@@ -1,4 +1,6 @@
 using Library.Blazor.Components;
+using Library.Infra.Data;
+using Library.Iof;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,7 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddInfraStructure(builder.Configuration);
+
 var app = builder.Build();
+
+CreateDatabase(app);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -26,3 +32,11 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.Run();
+return;
+
+static void CreateDatabase(WebApplication app)
+{
+	var serviceScoped = app.Services.CreateScope();
+	var dbContext = serviceScoped.ServiceProvider.GetRequiredService<LibraryDbContext>();
+	dbContext.Database.EnsureCreated();
+}

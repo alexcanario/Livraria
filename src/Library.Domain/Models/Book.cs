@@ -1,5 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using Library.Domain.Enums;
+
+using System.ComponentModel.DataAnnotations;
 
 namespace Library.Domain.Models;
 
@@ -16,17 +17,17 @@ public sealed class Book(
 	public int Id { get; set; } = id;
 	
 	[Required(ErrorMessage = "Informe o título do livro")]
-	[StringLength(100, ErrorMessage = "Minomo de {2} e máximo de {1}", MinimumLength = 10)]
+	[StringLength(50, ErrorMessage = "Minomo de {2} e máximo de {1}", MinimumLength = 10)]
 	public string Title { get; set; } = title;
 
 	[Required(ErrorMessage = "Informe o autor do livro")]
-	[StringLength(100)]
+	[StringLength(50)]
 	public string Author { get; set; } = author;
 
 	[Required(ErrorMessage = "Informe a data de publicação do livro")]
 	public DateTime PublishedDate { get; set; } = publishedDate;
 
-	[Required(ErrorMessage = "Informe a capa do livro")]
+	[StringLength(200)]
 	public string BookCover { get; set; } = bookCover;
 
 	[Required]
