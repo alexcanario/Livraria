@@ -8,3 +8,10 @@
 @using Microsoft.JSInterop
 @using Library.Blazor
 @using Library.Blazor.Components
+
+@using Library.Domain.Models
+@using Library.Domain.Enums
+@using Library.Domain.Abstractions
+
+@inject IBookRepository BookRepository
+@inject NavigationManager Navigation

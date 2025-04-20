@@ -8,9 +8,9 @@ namespace Library.Infra.Repositories;
 
 public class BookRepository(LibraryDbContext ctx) : IBookRepository
 {
-	public async Task<IEnumerable<Book>> GetAllAsync(CancellationToken cancellationToken)
+	public async Task<IEnumerable<Book>> GetAllAsync()
 	{
-		var books = await ctx.Books.ToListAsync(cancellationToken);
+		var books = await ctx.Books.ToListAsync();
 		return books;
 	}
 
@@ -34,10 +34,10 @@ public class BookRepository(LibraryDbContext ctx) : IBookRepository
 		}
 	}
 
-	public async Task AddAsync(Book book, CancellationToken cancellationToken)
+	public async Task AddAsync(Book book)
 	{
-		await ctx.Books.AddAsync(book, cancellationToken);
-		await ctx.SaveChangesAsync(cancellationToken);
+		await ctx.Books.AddAsync(book);
+		await ctx.SaveChangesAsync();
 	}
 
 	public async Task UpdateAsync(Book book, CancellationToken cancellationToken)
