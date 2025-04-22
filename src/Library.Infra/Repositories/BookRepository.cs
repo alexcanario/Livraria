@@ -40,9 +40,9 @@ public class BookRepository(LibraryDbContext ctx) : IBookRepository
 		await ctx.SaveChangesAsync();
 	}
 
-	public async Task UpdateAsync(Book book, CancellationToken cancellationToken)
+	public async Task UpdateAsync(Book book)
 	{
-		var bookToUpdate = await ctx.Books.FindAsync([book.Id], cancellationToken);
+		var bookToUpdate = await ctx.Books.FindAsync([book.Id]);
 		if (bookToUpdate is null)
 			throw new Exception("Book not found");
 
@@ -54,6 +54,6 @@ public class BookRepository(LibraryDbContext ctx) : IBookRepository
 		bookToUpdate.Category = book.Category;
 
 		ctx.Books.Update(bookToUpdate);
-		await ctx.SaveChangesAsync(cancellationToken);
+		await ctx.SaveChangesAsync();
 	}
 }

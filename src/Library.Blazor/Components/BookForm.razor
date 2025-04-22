@@ -1,0 +1,105 @@
+﻿@if (Book is not null)
+{
+	<EditForm method="post" FormName="BookForm" OnValidSubmit="SaveBook" Model="Book" id="SaveBook">
+		<h3>@HeaderText</h3>
+
+		@if (EditMode)
+		{
+			<input type="hidden" name="Book.Id" value="@Book.Id" />
+		}
+
+		@* Form data *@
+		<div class="mb-3">
+			<label for="titulo" class="form-label">Título</label>
+			<InputText id="titulo" @bind-Value="Book.Title" class="form-control" />
+		</div>
+
+		<div class="mb-3">
+			<label for="autor" class="form-label">Autor</label>
+			<InputText id="autor" @bind-Value="Book.Author" class="form-control" />
+		</div>
+
+		<div class="mb-3">
+			<label for="lancamento" class="form-label">Lançamento</label>
+			<InputDate id="lancamento" @bind-Value="Book.PublishedDate" class="form-control" />
+		</div>
+
+		<div class="mb-3">
+			<label for="editora" class="form-label">Editora</label>
+			<InputSelect id="editora" @bind-Value="Book.Publisher" class="form-control">
+				<option value="0">
+					Selecione a Editora
+				</option>
+				@foreach (var publisher in Enum.GetValues(typeof(EPublisher)))
+				{
+					<option value="@publisher">
+						@publisher.ToString()
+					</option>
+				}
+			</InputSelect>
+		</div>
+
+		<div class="mb-3">
+			<label for="capa" class="form-label">Capa</label>
+			<InputText id="capa" @bind-Value="Book.BookCover" class="form-control" />
+		</div>
+
+		<div class="mb-3">
+			<label for="categoria" class="form-label">Categoria</label>
+			<InputSelect id="categoria" @bind-Value="Book.Category" class="form-control">
+				<option value="0">
+					Selecione a Categoria
+				</option>
+				@foreach (var category in Enum.GetValues(typeof(ECategory)))
+				{
+					<option value="@category">
+						@category.ToString()
+					</option>
+				}
+			</InputSelect>
+		</div>
+
+		<div class="mb-3">
+			<button class="btn btn-primary">
+				Enviar
+			</button>
+			@* O parâmetro data-enhance-nav="false" é utilizado para evitar que o Blazor faça a navegação automática após o envio do formulário. *@
+			<a href="/ListBooks" class="btn btn-secondary ms-3" data-enhance-nav="false">
+				Retornar para biblioteca
+			</a>
+		</div>
+		<DataAnnotationsValidator />
+		<ValidationSummary class="text-danger" />
+	</EditForm>
+}
+
+@code {
+	[Parameter] public bool EditMode { get; set; } = false;
+
+	[Parameter] public int Id { get; set; }
+
+	[Parameter] public EventCallback<Book> OnValidBookSubmit { get; set; } //Informa o componente pai que o formulário foi enviado com sucesso
+
+	[SupplyParameterFromForm(FormName = "BookForm")]
+
+	public Book? Book { get; set; }
+
+	private string HeaderText => EditMode ? $"Editar Livro: {Id}" : "Adicionar Livro";
+
+	protected override async Task OnParametersSetAsync()
+	{
+		if (EditMode && Book?.Id != Id)
+		{
+			Book = await BookRepository.GetByIdAsync(Id);
+		}
+		else if(!EditMode && Book == null)
+		{
+			Book = new Book(0, string.Empty, string.Empty, DateTime.UtcNow, string.Empty, EPublisher.Other, ECategory.Other);
+		}
+	}
+
+	private async Task SaveBook()
+	{
+		await OnValidBookSubmit.InvokeAsync(Book);
+	}
+}

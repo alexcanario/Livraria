@@ -16,7 +16,7 @@ else
 	<div class="row">
         @foreach (var book in Books)
         {
-	        <BookCard Book="@book"/>
+	        <BookCard @rendermode="InteractiveServer"  Book="@book"/>
         }
     </div>
 }

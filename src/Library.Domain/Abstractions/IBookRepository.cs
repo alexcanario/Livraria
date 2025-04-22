@@ -9,5 +9,5 @@ public interface IBookRepository
 	Task<Book?> GetByTitleAsync(string title, CancellationToken cancellationToken);
 	Task Remove(int id);
 	Task AddAsync(Book book);
-	Task UpdateAsync(Book book, CancellationToken cancellationToken);
+	Task UpdateAsync(Book book);
 }
